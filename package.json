@@ -1,0 +1,16 @@
+{
+  "name": "crypto-back",
+  "version": "1.0.0",
+  "description": "REST backend system design for crypto-dex app",
+  "main": "index.js",
+  "author": "DevGoblins",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
