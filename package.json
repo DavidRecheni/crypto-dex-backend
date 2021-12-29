@@ -1,5 +1,5 @@
 {
-  "name": "crypto-back",
+  "name": "crypto-dex-backend",
   "version": "1.0.0",
   "description": "REST backend system design for crypto-dex app",
   "main": "index.js",
