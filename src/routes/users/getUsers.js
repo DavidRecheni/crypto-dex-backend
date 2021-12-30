@@ -3,7 +3,12 @@ const router = Router()
 const User = require('../../models/User')
 
 router.get('/users', (req, res) => {
-  User.find({})
+  console.log(req.query)
+  User.find({
+    username: { $regex: `.*${req?.query?.username || ''}.*`, $options: 'i' },
+    name: { $regex: `.*${req?.query?.name || ''}.*`, $options: 'i' },
+    wallets: { $regex: `.*${req?.query?.wallets || ''}.*` }
+  })
     .exec()
     .then((result) => {
       console.log(result)
