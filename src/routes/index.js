@@ -4,7 +4,7 @@ const router = Router();
 router.get('/', (req, res) => {
   res.json(
     {
-      "title": "Hello world!!!"
+      "title": "This is an REST api to serve Crypto-dex app"
     }
   );
 })
