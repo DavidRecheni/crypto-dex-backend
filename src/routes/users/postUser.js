@@ -8,8 +8,8 @@ router.post('/users', (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     name: req?.body?.name,
     username: req?.body?.username,
-    wallets: req?.body?.wallets,
-    description: req?.body?.description
+    wallet: req?.body?.wallet,
+    bio: req?.body?.bio
   })
 
   user.save().then((result) => {

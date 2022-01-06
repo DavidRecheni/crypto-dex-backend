@@ -7,7 +7,7 @@ router.get('/users', (req, res) => {
   User.find({
     username: { $regex: `.*${req?.query?.username || ''}.*`, $options: 'i' },
     name: { $regex: `.*${req?.query?.name || ''}.*`, $options: 'i' },
-    wallets: { $regex: `.*${req?.query?.wallets || ''}.*` }
+    wallet: { $regex: `.*${req?.query?.wallet || ''}.*` }
   })
     .exec()
     .then((result) => {
