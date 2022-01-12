@@ -2,7 +2,7 @@ const { Router } = require('express')
 const router = Router()
 const User = require('../../models/User')
 
-router.get('/users', (req, res) => {
+router.get('/user', (req, res) => {
   console.log(req.query)
   User.find({
     username: { $regex: `.*${req?.query?.username || ''}.*`, $options: 'i' },

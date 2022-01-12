@@ -3,7 +3,7 @@ const { Router } = require('express')
 const router = Router()
 const User = require('../../models/User')
 
-router.post('/users', (req, res) => {
+router.post('/user', (req, res) => {
   const user = new User({
     _id: new mongoose.Types.ObjectId(),
     name: req?.body?.name,
