@@ -2,6 +2,9 @@ const mongoose = require('mongoose')
 const { Router } = require('express')
 const router = Router()
 const User = require('../../models/User')
+const cors = require('cors')
+
+router.use(cors())
 
 router.post('/user', (req, res) => {
   const user = new User({

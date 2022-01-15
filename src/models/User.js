@@ -3,10 +3,11 @@ const mongoosastic = require("mongoosastic");
 
 const userSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
-  name: {type:String, es_indexed:true},
+  name: { type: String, es_indexed: true },
   username: String,
   wallet: String,
-  bio: String
+  bio: String,
+  avatar: String
 })
 
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
@@ -17,7 +18,7 @@ module.exports = User
 
 
 
-// userSchema.plugin(mongoosastic,{  
+// userSchema.plugin(mongoosastic,{
 //   hosts: [
 //       "https://search-cryptodex-elastic-ivg4rnchvfsezqrfsv6qt3mlva.eu-central-1.es.amazonaws.com"
 //   ],
