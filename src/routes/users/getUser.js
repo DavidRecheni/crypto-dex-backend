@@ -25,7 +25,7 @@ router.get('/username/:startswith', (req, res) => {
   console.log(req.params)
   const id = req.params.startswith
 
-  var response = {
+  const response = {
     "data": [
       {
         "username": id + ".crypto",
