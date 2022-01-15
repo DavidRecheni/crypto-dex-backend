@@ -9,7 +9,8 @@ router.post('/user', (req, res) => {
     name: req?.body?.name,
     username: req?.body?.username,
     wallet: req?.body?.wallet,
-    bio: req?.body?.bio
+    bio: req?.body?.bio,
+    avatar: req?.body?.avatar
   })
 
   user.save().then((result) => {
