@@ -14,8 +14,8 @@
     "mongoose": "^6.1.4"
   },
   "scripts": {
-    "node": "node src/app.js",
-    "start": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
