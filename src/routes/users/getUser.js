@@ -6,7 +6,7 @@ const cors = require('cors')
 router.use(cors())
 
 router.get('/user/:userID', (req, res) => {
-  console.log(req.params)
+  console.log('Fetch user', req.params)
   const id = req.params.userID
 
   User.findById(id)
