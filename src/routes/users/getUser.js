@@ -73,18 +73,25 @@ router.get('/username/:startswith', (req, res) => {
   }
 
   res.status(200).json(response)
-
-  // User.findById(id)
-  //   .exec()
-  //   .then(r => {
-  //     console.log(r)
-  //     res.status(200).json(r)
-  //   })
-  //   .catch(err => {
-  //     console.log(err)
-  //     res.status(500).json({ error: err })
-  //   })
 })
+
+
+router.get('/wallet/:address', (req, res) => {
+  console.log('Fetch user', req.params)
+  const address = req.params.address
+
+  User.findOne({ wallet: address })
+    .exec()
+    .then(r => {
+      console.log(r)
+      res.status(200).json(r)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ error: err })
+    })
+})
+
 
 module.exports = router;
 
@@ -101,17 +108,4 @@ GET _search
     }
   }
 }
-
-
 */
-
-  // User.findById(id)
-  //   .exec()
-  //   .then(r => {
-  //     console.log(r)
-  //     res.status(200).json(r)
-  //   })
-  //   .catch(err => {
-  //     console.log(err)
-  //     res.status(500).json({ error: err })
-  //   })
