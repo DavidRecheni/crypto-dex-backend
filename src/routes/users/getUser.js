@@ -33,6 +33,24 @@ router.get('/username/:startswith', (req, res) => {
 
     res.status(200).json(hits)
   });
+
+  res.status(200).json(response)
+})
+
+router.get('/wallet/:address', (req, res) => {
+  console.log('Fetch wallet', req.params)
+  const address = req.params.address
+
+  User.findOne({ wallet: address })
+    .exec()
+    .then(r => {
+      console.log(r)
+      res.status(200).json(r)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ error: err })
+    })
 })
 
 module.exports = router;
@@ -50,6 +68,7 @@ GET _search
     }
   }
 }
+<<<<<<< HEAD
 
 {
     "query": {
@@ -59,4 +78,6 @@ GET _search
     }
 }
 
+=======
+>>>>>>> d37b1aa05a54b6cebff9eca767478ce5c5bc2be2
 */

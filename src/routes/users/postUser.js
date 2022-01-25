@@ -2,11 +2,13 @@ const mongoose = require('mongoose')
 const { Router } = require('express')
 const router = Router()
 const User = require('../../models/User')
+const OpenSearchHelper = require('../../helper/OpenSearch.Helper')
 const cors = require('cors')
 
 router.use(cors())
 
 router.post('/user', (req, res) => {
+
   const user = new User({
     _id: new mongoose.Types.ObjectId(),
     name: req?.body?.name,
@@ -16,9 +18,12 @@ router.post('/user', (req, res) => {
     avatar: req?.body?.avatar
   })
 
-  user.save().then((result) => {
-    console.log("201", result)
+  user.save().then(user => {
+
+    OpenSearchHelper.indexUser(user.username, user._id.toString())
+    console.log("201", user.username)
   }).catch((err) => {
+
     console.log("400", err)
   });
 
@@ -26,6 +31,7 @@ router.post('/user', (req, res) => {
     message: "Handling POST request to /users",
     createdUser: user
   })
+
 })
 
 module.exports = router;
