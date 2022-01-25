@@ -2,7 +2,7 @@ const { Router } = require('express')
 const router = Router()
 const User = require('../../models/User')
 const cors = require('cors')
-const OpenSearchHelper = require('../../helper/OpenSearch.Helper')
+const OpenSearchHelper = require('../../helper/opensearch.helper')
 
 router.use(cors())
 
