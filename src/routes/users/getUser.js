@@ -29,12 +29,14 @@ router.get('/username/:startswith', (req, res) => {
   console.log("Looking for username: " )
 
   var response = OpenSearchHelper.searchUser(id).then((hits) => {
-    console.log("OpenSearch result count" + hits.total.value)
+    console.log("OpenSearch result count " + hits.total.value)
 
     res.status(200).json(hits)
-  });
-
-  res.status(200).json(response)
+  })
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({ error: err })
+  })
 })
 
 router.get('/wallet/:address', (req, res) => {
