@@ -21,14 +21,14 @@ router.post('/user', (req, res) => {
   user.save().then(user => {
 
     OpenSearchHelper.indexUser(user.username, user._id.toString())
-    console.log("201", user.username)
+    //console.log("201", user.username)
   }).catch((err) => {
 
     console.log("400", err)
   });
 
   res.status(201).json({
-    message: "Handling POST request to /users",
+    message: "User created",
     createdUser: user
   })
 

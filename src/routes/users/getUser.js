@@ -4,14 +4,13 @@ const User = require('../../models/User')
 const cors = require('cors')
 const OpenSearchHelper = require('../../helper/opensearch.helper')
 
-router.use(cors())
+// router.use(cors())
 
 router.get('/user/:userID', (req, res) => {
   console.log('Fetch user', req.params)
   const id = req.params.userID
 
-  User.findById(id)
-    .exec()
+  User.findById(id).exec()
     .then(r => {
       console.log(r)
       res.status(200).json(r)
@@ -23,15 +22,12 @@ router.get('/user/:userID', (req, res) => {
 })
 
 router.get('/username/:startswith', (req, res) => {
-  console.log(req.params)
+
   const id = req.params.startswith
 
-  console.log("Looking for username: " )
-
-  var response = OpenSearchHelper.searchUser(id).then((hits) => {
-    console.log("OpenSearch result count " + hits.total.value)
-
-    res.status(200).json(hits)
+  var response = OpenSearchHelper.searchUser(id)
+  .then((hits) => {
+    res.status(200).json(hits.hits.map(mapHit));
   })
   .catch(err => {
     console.log(err)
@@ -40,20 +36,24 @@ router.get('/username/:startswith', (req, res) => {
 })
 
 router.get('/wallet/:address', (req, res) => {
-  console.log('Fetch wallet', req.params)
+
   const address = req.params.address
 
-  User.findOne({ wallet: address })
-    .exec()
-    .then(r => {
-      console.log(r)
-      res.status(200).json(r)
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json({ error: err })
-    })
+  User.findOne({ wallet: address }).exec()
+  .then(r => {
+    res.status(200).json(r)
+  })
+  .catch(err => {
+    res.status(500).json({ error: err })
+  })
 })
+
+function mapHit(hit) {
+  return {
+    'username' : hit._source.username,
+    'userId' : hit._source.userId
+  };
+}
 
 module.exports = router;
 
