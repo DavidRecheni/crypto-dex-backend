@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { Router } = require('express')
 const router = Router()
 const User = require('../../models/User')
-const OpenSearchHelper = require('../../helper/OpenSearch.Helper')
+const OpenSearchHelper = require('../../helper/opensearch.helper')
 const cors = require('cors')
 
 router.use(cors())
