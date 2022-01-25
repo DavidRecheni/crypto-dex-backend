@@ -70,7 +70,6 @@ GET _search
     }
   }
 }
-<<<<<<< HEAD
 
 {
     "query": {
@@ -80,6 +79,4 @@ GET _search
     }
 }
 
-=======
->>>>>>> d37b1aa05a54b6cebff9eca767478ce5c5bc2be2
 */
