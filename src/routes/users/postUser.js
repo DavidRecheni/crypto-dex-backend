@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 const { Router } = require('express')
 const router = Router()
-const User = require('../../models/User')
-const OpenSearchHelper = require('../../helper/opensearch.helper')
-const cors = require('cors')
+const User = require('../../models/user')
+const OpenSearchService = require('../../services/opensearch')
 
-router.use(cors())
-
+/**
+ * Create a new user and indexes for quicker search
+ */
 router.post('/user', (req, res) => {
 
   const user = new User({
@@ -20,8 +20,7 @@ router.post('/user', (req, res) => {
 
   user.save().then(user => {
 
-    OpenSearchHelper.indexUser(user.username, user._id.toString())
-    //console.log("201", user.username)
+    OpenSearchService.indexUser(user.username, user._id.toString())
   }).catch((err) => {
 
     console.log("400", err)

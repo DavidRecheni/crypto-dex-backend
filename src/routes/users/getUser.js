@@ -1,11 +1,11 @@
 const { Router } = require('express')
 const router = Router()
-const User = require('../../models/User')
-const cors = require('cors')
-const OpenSearchHelper = require('../../helper/opensearch.helper')
+const User = require('../../models/user')
+const OpenSearchService = require('../../services/opensearch')
 
-// router.use(cors())
-
+/**
+ * Get user by userId
+ */
 router.get('/user/:userID', (req, res) => {
   console.log('Fetch user', req.params)
   const id = req.params.userID
@@ -21,11 +21,14 @@ router.get('/user/:userID', (req, res) => {
     })
 })
 
+/**
+ * Get username by the first characters sent (min 3)
+ */
 router.get('/username/:startswith', (req, res) => {
 
   const id = req.params.startswith
 
-  var response = OpenSearchHelper.searchUser(id)
+  var response = OpenSearchService.searchUser(id)
   .then((hits) => {
     res.status(200).json(hits.hits.map(mapHit));
   })
@@ -35,6 +38,9 @@ router.get('/username/:startswith', (req, res) => {
   })
 })
 
+/**
+ * Get user by wallet address
+ */
 router.get('/wallet/:address', (req, res) => {
 
   const address = req.params.address

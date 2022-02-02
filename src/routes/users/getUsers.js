@@ -1,7 +1,10 @@
 const { Router } = require('express')
 const router = Router()
-const User = require('../../models/User')
+const User = require('../../models/user')
 
+/**
+ * Get all users
+ */
 router.get('/user', (req, res) => {
   console.log(req.query)
   User.find({
