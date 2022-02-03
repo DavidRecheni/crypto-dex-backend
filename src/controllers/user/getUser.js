@@ -7,7 +7,9 @@ const OpenSearchService = require('../../services/opensearch')
  * Get user by userId
  */
 router.get('/user/:userID', (req, res) => {
-  console.log('Fetch user', req.params)
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Get user by Used Id'
+
   const id = req.params.userID
 
   User.findById(id).exec()
@@ -25,6 +27,8 @@ router.get('/user/:userID', (req, res) => {
  * Get username by the first characters sent (min 3)
  */
 router.get('/username/:startswith', (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Get user by the first characters of the username (case insensitive)'
 
   const id = req.params.startswith
 
@@ -39,26 +43,12 @@ router.get('/username/:startswith', (req, res) => {
 })
 
 /**
- * Get user by wallet address
- */
-router.get('/wallet/:address', (req, res) => {
-
-  const address = req.params.address
-
-  User.findOne({ wallet: address }).exec()
-    .then(r => {
-      res.status(200).json(r)
-    })
-    .catch(err => {
-      res.status(500).json({ error: err })
-    })
-})
-
-/**
  * Get all users
  */
- router.get('/user', (req, res) => {
-  console.log(req.query)
+router.get('/user', (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Get all users'
+
   User.find({
     username: { $regex: `.*${req?.query?.username || ''}.*`, $options: 'i' },
     name: { $regex: `.*${req?.query?.name || ''}.*`, $options: 'i' },

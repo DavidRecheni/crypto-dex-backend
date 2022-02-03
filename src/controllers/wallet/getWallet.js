@@ -7,6 +7,8 @@ const OpenSearchService = require('../../services/opensearch')
  * Get user by wallet address
  */
 router.get('/wallet/:address', (req, res) => {
+  // #swagger.tags = ['Wallet']
+  // #swagger.description = 'Get user by wallet address'
 
   const address = req.params.address
 

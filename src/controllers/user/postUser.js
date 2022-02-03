@@ -8,6 +8,8 @@ const OpenSearchService = require('../../services/opensearch')
  * Create a new user and indexes for quicker search
  */
 router.post('/user', (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Create a new user'
 
   const user = new User({
     _id: new mongoose.Types.ObjectId(),
