@@ -63,7 +63,7 @@ const searchUser = async function(startsWith) {
     var query = {
         'query': {
             'prefix': {
-                'username': startsWith
+                'username': startsWith.toLowerCase()
             }
         }
     }
