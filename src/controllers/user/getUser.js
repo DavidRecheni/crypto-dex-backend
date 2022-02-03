@@ -54,6 +54,26 @@ router.get('/wallet/:address', (req, res) => {
     })
 })
 
+/**
+ * Get all users
+ */
+ router.get('/user', (req, res) => {
+  console.log(req.query)
+  User.find({
+    username: { $regex: `.*${req?.query?.username || ''}.*`, $options: 'i' },
+    name: { $regex: `.*${req?.query?.name || ''}.*`, $options: 'i' },
+    wallet: { $regex: `.*${req?.query?.wallet || ''}.*` }
+  })
+    .exec()
+    .then((result) => {
+      console.log(result)
+      res.status(200).json(result)
+    }).catch((err) => {
+      console.log(err)
+      res.status(500).json({ error: err })
+    });
+})
+
 function mapHit(hit) {
   return {
     'username': hit._source.username,
@@ -62,7 +82,6 @@ function mapHit(hit) {
 }
 
 module.exports = router;
-
 
 /*
 
