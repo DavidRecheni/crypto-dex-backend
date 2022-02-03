@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const router = Router()
-const User = require('../../models/user')
+const User = require('../../models/User')
 const OpenSearchService = require('../../services/opensearch')
 
 /**
@@ -29,13 +29,13 @@ router.get('/username/:startswith', (req, res) => {
   const id = req.params.startswith
 
   var response = OpenSearchService.searchUser(id)
-  .then((hits) => {
-    res.status(200).json(hits.hits.map(mapHit));
-  })
-  .catch(err => {
-    console.log(err)
-    res.status(500).json({ error: err })
-  })
+    .then((hits) => {
+      res.status(200).json(hits.hits.map(mapHit));
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ error: err })
+    })
 })
 
 /**
@@ -46,18 +46,18 @@ router.get('/wallet/:address', (req, res) => {
   const address = req.params.address
 
   User.findOne({ wallet: address }).exec()
-  .then(r => {
-    res.status(200).json(r)
-  })
-  .catch(err => {
-    res.status(500).json({ error: err })
-  })
+    .then(r => {
+      res.status(200).json(r)
+    })
+    .catch(err => {
+      res.status(500).json({ error: err })
+    })
 })
 
 function mapHit(hit) {
   return {
-    'username' : hit._source.username,
-    'userId' : hit._source.userId
+    'username': hit._source.username,
+    'userId': hit._source.userId
   };
 }
 
