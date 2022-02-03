@@ -28,7 +28,7 @@ router.get('/username/:startswith', (req, res) => {
 
   const id = req.params.startswith
 
-  var response = OpenSearchService.searchUser(id)
+  OpenSearchService.searchUser(id)
     .then((hits) => {
       res.status(200).json(hits.hits.map(mapHit));
     })

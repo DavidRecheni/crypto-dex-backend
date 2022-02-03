@@ -11,6 +11,6 @@ const userSchema = new mongoose.Schema({
 
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 
-var user = mongoose.model("User", userSchema);
+const user = mongoose.model("User", userSchema);
 
 module.exports = user
