@@ -12,9 +12,9 @@ app.use(cors())
 app.set('port', process.env.PORT || 3001)
 app.set('json spaces', 2)
 
-app.use(
+app.get(
   '/swagger',
-  swaggerUi.serve, 
+  swaggerUi.serve,
   swaggerUi.setup(swaggerDocument)
 );
 
