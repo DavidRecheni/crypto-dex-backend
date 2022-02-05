@@ -1,7 +1,10 @@
 const { Router } = require('express')
 const router = Router()
+const Constant = require('../../constant')
 const User = require('../../models/User')
+const response = require('../../models/response')
 const OpenSearchService = require('../../services/opensearch')
+const constants = require('../../constant')
 
 /**
  * Get user by userId
@@ -12,14 +15,36 @@ router.get('/user/:userID', (req, res) => {
 
   const id = req.params.userID
 
+  if(!validUserId(id))
+  {
+    let resp = {
+      status : 'Error',
+      error : Constant.ErrorCode.User.InvalidFormat,
+      data : {}
+    }
+    res.status(200).json(resp)
+  }
+
   User.findById(id).exec()
-    .then(r => {
-      console.log(r)
-      res.status(200).json(r)
+    .then(userFound => {
+
+      let resp = {
+        status : 'Ok',
+        error : '',
+        data : userFound
+      }
+      
+      res.status(200).json(resp)
     })
     .catch(err => {
-      console.log(err)
-      res.status(500).json({ error: err })
+
+      let resp = {
+        status : 'Error',
+        error : Constant.ErrorCode.User.NotFound,
+        data : {}
+      }
+
+      res.status(200).json(resp)
     })
 })
 
@@ -34,11 +59,24 @@ router.get('/username/:startswith', (req, res) => {
 
   OpenSearchService.searchUser(id)
     .then((hits) => {
-      res.status(200).json(hits.hits.map(mapHit));
+
+      let resp = {
+        status : 'Ok',
+        error : '',
+        data : hits.hits.map(mapHit)
+      }
+
+      res.status(200).json(resp)
     })
     .catch(err => {
-      console.log(err)
-      res.status(500).json({ error: err })
+      
+      let resp = {
+        status : 'Error',
+        error : Constant.ErrorCode.User.UsernameError,
+        data : {}
+      }
+
+      res.status(200).json(resp)
     })
 })
 
@@ -53,15 +91,26 @@ router.get('/user', (req, res) => {
     username: { $regex: `.*${req?.query?.username || ''}.*`, $options: 'i' },
     name: { $regex: `.*${req?.query?.name || ''}.*`, $options: 'i' },
     wallet: { $regex: `.*${req?.query?.wallet || ''}.*` }
-  })
-    .exec()
-    .then((result) => {
-      console.log(result)
-      res.status(200).json(result)
-    }).catch((err) => {
-      console.log(err)
-      res.status(500).json({ error: err })
-    });
+  }).exec()
+  .then((result) => {
+
+    let resp = {
+      status : 'Ok',
+      error : '',
+      data : result
+    }
+
+    res.status(200).json(resp)
+  }).catch((err) => {
+    
+    let resp = {
+      status : 'Error',
+      error : Constant.ErrorCode.User.ErrorUserList,
+      data : {}
+    }
+
+    res.status(200).json(resp)
+  });
 })
 
 function mapHit(hit) {
@@ -69,6 +118,15 @@ function mapHit(hit) {
     'username': hit._source.username,
     'userId': hit._source.userId
   };
+}
+
+function validUserId(userId) {
+  
+  //TODO: change to regex
+  if(userId.length > 25)
+    return false;
+
+  return true;
 }
 
 module.exports = router;
