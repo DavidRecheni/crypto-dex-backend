@@ -12,7 +12,6 @@ const UserSchema = new mongoose_1.default.Schema({
     bio: String,
     avatar: String,
 });
-mongoose_1.default.connect(process.env.DATABASE_URL);
 const user = mongoose_1.default.model('User', UserSchema);
 exports.default = user;
 //# sourceMappingURL=User.js.map

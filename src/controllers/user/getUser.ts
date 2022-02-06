@@ -11,7 +11,7 @@ const router = Router();
  * Get user by userId
  */
 // TODO: Define type
-router.get('/user/:userID', (req:express.Request, res:express.Response) => {
+router.get('/user/:userID', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by Used Id'
 
@@ -21,31 +21,33 @@ router.get('/user/:userID', (req:express.Request, res:express.Response) => {
     res.status(200).json(responseBuilder({ error: ERROR_CODES.User.InvalidFormat }));
   }
 
-  User.findById(id).exec()
-    .then((userFound: UserType) => {
-      res.status(200).json(responseBuilder({ data: userFound }));
-    })
-    .catch(() => {
-      res.status(200).json(responseBuilder({ error: ERROR_CODES.User.NotFound }));
-    });
+  try {
+    const data = await User.findById(id).exec()
+      res.status(200).json(responseBuilder({ data }));
+  } catch (error) {
+    console.log(error)
+    res.status(200).json(responseBuilder({ error: ERROR_CODES.User.NotFound }));
+  }
+  
 });
 
 /**
  * Get username by the first characters sent (min 3)
  */
-router.get('/username/:startswith', (req:express.Request, res:express.Response) => {
+router.get('/username/:startswith', async(req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by the first characters of the username (case insensitive)'
 
   const id = req.params.startswith;
 
-  searchUser(id)
-    .then((hits) => {
-      res.status(200).json(responseBuilder({ data: hits.hits.map(userUtils.mapHit) }));
-    })
-    .catch(() => {
+    try {
+      const data = await searchUser(id)
+      res.status(200).json(responseBuilder({ data: data.hits.map(userUtils.mapHit) }));
+    } catch (error) {
+      console.log(error)
       res.status(200).json(responseBuilder({ error: ERROR_CODES.User.UsernameError }));
-    });
+    }
+
 });
 
 /**

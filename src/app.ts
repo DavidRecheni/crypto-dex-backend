@@ -5,8 +5,12 @@ import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import swaggerDocument from './swagger.json';
 import routes from './config/routes';
+import mongoose from 'mongoose';
 
 dotenv.config();
+
+mongoose.connect(process.env.DATABASE_URL);
+
 const app = express();
 routes(app);
 

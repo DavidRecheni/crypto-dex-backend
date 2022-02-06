@@ -9,8 +9,6 @@ const UserSchema = new mongoose.Schema({
   avatar: String,
 });
 
-mongoose.connect(process.env.DATABASE_URL);
-
 const user = mongoose.model('User', UserSchema);
 
 export default user;
