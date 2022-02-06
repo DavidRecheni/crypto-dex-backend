@@ -1,14 +1,11 @@
 /* eslint-disable no-underscore-dangle */
-import express from 'express';
+import express, { Router } from 'express';
 import responseBuilder from '../../utils/responseBuilder';
-import { UserType } from '../../models/User';
+import User, { UserType } from '../../models/User';
 import { searchUser } from '../../services/openSearchService';
-
-const { Router } = require('express');
+import ERROR_CODES from '../../constant';
 
 const router = Router();
-const ERROR_CODES = require('../../constant');
-const User = require('../../models/User');
 
 /**
  * Get user by userId

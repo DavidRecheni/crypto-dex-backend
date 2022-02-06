@@ -35,7 +35,7 @@ export const indexUser = (userName: string, userId: string) => {
   console.log('Username has been indexed', userName, userId, response);
 };
 
-export const searchUser = async function (startsWith: string) {
+export const searchUser = async (startsWith: string) => {
   const client = createOpenSearchClient();
 
   // #FOR LATER USE (REGEX)
