@@ -4,30 +4,20 @@ import responseBuilder from '../../utils/responseBuilder';
 import User, { UserType } from '../../models/User';
 import { searchUser } from '../../services/openSearchService';
 import ERROR_CODES from '../../constant';
-
+import userUtils from '../../utils/userUtils';
 const router = Router();
 
 /**
  * Get user by userId
  */
-
-const validUserId = (userId: string) => !(userId.length > 25);
-
 // TODO: Define type
-function mapHit(hit: any) {
-  return {
-    username: hit._source.username,
-    userId: hit._source.userId,
-  };
-}
-
 router.get('/user/:userID', (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by Used Id'
 
   const id = req.params.userID;
 
-  if (!validUserId(id)) {
+  if (!userUtils.validUserId(id)) {
     res.status(200).json(responseBuilder({ error: ERROR_CODES.User.InvalidFormat }));
   }
 
@@ -51,7 +41,7 @@ router.get('/username/:startswith', (req:express.Request, res:express.Response) 
 
   searchUser(id)
     .then((hits) => {
-      res.status(200).json(responseBuilder({ data: hits.hits.map(mapHit) }));
+      res.status(200).json(responseBuilder({ data: hits.hits.map(userUtils.mapHit) }));
     })
     .catch(() => {
       res.status(200).json(responseBuilder({ error: ERROR_CODES.User.UsernameError }));
