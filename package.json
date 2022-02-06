@@ -17,7 +17,6 @@
     "swagger-ui-express": "^4.3.0"
   },
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "yarn build",
     "start": "node .",
