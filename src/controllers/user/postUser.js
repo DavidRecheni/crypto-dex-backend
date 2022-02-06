@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 const { Router } = require('express')
 const router = Router()
-const Constant = require('../../constant')
+const CONSTANT = require('../../constant')
+const utils = require('../../utils/utils')
 const User = require('../../models/User')
-const OpenSearchService = require('../../services/opensearch')
+const openSearchService = require('../../services/opensearch')
 
 /**
  * Create a new user and indexes for quicker search
@@ -21,29 +22,21 @@ router.post('/user', (req, res) => {
     avatar: req?.body?.avatar
   })
 
-  user.save().then(user => {
+  user.save()
+    .then(user => {
 
-    OpenSearchService.indexUser(user.username, user._id.toString())
+      openSearchService.indexUser(user.username, user._id.toString())
+      return utils.createResponse(user)
+    })
+    .catch((err) => {
 
-    let resp = {
-      status : 'Ok',
-      error : '',
-      data : user
-    }
+      return utils.createResponse({}, CONSTANT.ERRORCODE.USER.UNABLETOCREATE)
+    })
+    .then(result => 
 
-    res.status(200).json(resp)
-
-  }).catch((err) => {
-
-    let resp = {
-      status : 'Error',
-      error : Constant.ErrorCode.User.UnableToCreate,
-      data : {}
-    }
-
-    res.status(200).json(resp)
-
-  });
+      //TODO: to check whether the response HTTP code must be Restful strict   
+      res.status(200).json(result)
+    );
 })
 
 module.exports = router;

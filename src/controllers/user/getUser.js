@@ -1,10 +1,9 @@
 const { Router } = require('express')
 const router = Router()
-const Constant = require('../../constant')
+const CONSTANT = require('../../constant')
+const utils = require('../../utils/utils')
 const User = require('../../models/User')
-const response = require('../../models/response')
-const OpenSearchService = require('../../services/opensearch')
-const constants = require('../../constant')
+const openSearchService = require('../../services/opensearch')
 
 /**
  * Get user by userId
@@ -15,37 +14,28 @@ router.get('/user/:userID', (req, res) => {
 
   const id = req.params.userID
 
-  if(!validUserId(id))
+  if(!utils.validUserId(id))
   {
-    let resp = {
-      status : 'Error',
-      error : Constant.ErrorCode.User.InvalidFormat,
-      data : {}
-    }
+    const resp = utils.createResponse({}, CONSTANT.ERRORCODE.USER.INVALIDFORMAT)
     res.status(200).json(resp)
   }
 
   User.findById(id).exec()
     .then(userFound => {
-
-      let resp = {
-        status : 'Ok',
-        error : '',
-        data : userFound
-      }
       
-      res.status(200).json(resp)
+      if(!userFound)
+        return utils.createResponse({}, CONSTANT.ERRORCODE.USER.NOTFOUND)
+      
+      return utils.createResponse(userFound)
     })
     .catch(err => {
 
-      let resp = {
-        status : 'Error',
-        error : Constant.ErrorCode.User.NotFound,
-        data : {}
-      }
+      return utils.createResponse({}, CONSTANT.ERRORCODE.USER.NOTFOUND)
+    }).then(result => 
 
-      res.status(200).json(resp)
-    })
+      //TODO: to check whether the response HTTP code must be Restful strict   
+      res.status(200).json(result)
+    );
 })
 
 /**
@@ -57,27 +47,20 @@ router.get('/username/:startswith', (req, res) => {
 
   const id = req.params.startswith
 
-  OpenSearchService.searchUser(id)
+  openSearchService.searchUser(id)
     .then((hits) => {
 
-      let resp = {
-        status : 'Ok',
-        error : '',
-        data : hits.hits.map(mapHit)
-      }
-
-      res.status(200).json(resp)
+      return utils.createResponse(hits.hits.map(utils.mapHit))
     })
     .catch(err => {
       
-      let resp = {
-        status : 'Error',
-        error : Constant.ErrorCode.User.UsernameError,
-        data : {}
-      }
-
-      res.status(200).json(resp)
+      return utils.createResponse({},CONSTANT.ERRORCODE.USER.USERNAMEERROR)
     })
+    .then(result => 
+
+      //TODO: to check whether the response HTTP code must be Restful strict   
+      res.status(200).json(result)
+    );
 })
 
 /**
@@ -94,40 +77,18 @@ router.get('/user', (req, res) => {
   }).exec()
   .then((result) => {
 
-    let resp = {
-      status : 'Ok',
-      error : '',
-      data : result
-    }
-
-    res.status(200).json(resp)
-  }).catch((err) => {
+    return utils.createResponse(result)
+  })
+  .catch((err) => {
     
-    let resp = {
-      status : 'Error',
-      error : Constant.ErrorCode.User.ErrorUserList,
-      data : {}
-    }
+    return utils.createResponse({}, CONSTANT.ERRORCODE.USER.ERRORUSERLIST)
+  })
+  .then(result => 
 
-    res.status(200).json(resp)
-  });
+    //TODO: to check whether the response HTTP code must be Restful strict   
+    res.status(200).json(result)
+  );
 })
-
-function mapHit(hit) {
-  return {
-    'username': hit._source.username,
-    'userId': hit._source.userId
-  };
-}
-
-function validUserId(userId) {
-  
-  //TODO: change to regex
-  if(userId.length > 25)
-    return false;
-
-  return true;
-}
 
 module.exports = router;
 
