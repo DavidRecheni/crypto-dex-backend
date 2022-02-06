@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { Router } = require('express')
 const router = Router()
+const Constant = require('../../constant')
 const User = require('../../models/User')
 const OpenSearchService = require('../../services/opensearch')
 
@@ -23,16 +24,26 @@ router.post('/user', (req, res) => {
   user.save().then(user => {
 
     OpenSearchService.indexUser(user.username, user._id.toString())
+
+    let resp = {
+      status : 'Ok',
+      error : '',
+      data : user
+    }
+
+    res.status(200).json(resp)
+
   }).catch((err) => {
 
-    console.log("400", err)
+    let resp = {
+      status : 'Error',
+      error : Constant.ErrorCode.User.UnableToCreate,
+      data : {}
+    }
+
+    res.status(200).json(resp)
+
   });
-
-  res.status(201).json({
-    message: "User created",
-    createdUser: user
-  })
-
 })
 
 module.exports = router;
