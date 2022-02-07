@@ -5,6 +5,8 @@ import User, { UserType } from '../../models/User';
 import { searchUser } from '../../services/openSearchService';
 import ERROR_CODES from '../../constant';
 import userUtils from '../../utils/userUtils';
+import cors from 'cors';
+
 const router = Router();
 
 /**
@@ -18,15 +20,15 @@ router.get('/user/:userID', async (req:express.Request, res:express.Response) =>
   const id = req.params.userID;
 
   if (!userUtils.validUserId(id)) {
-    res.status(200).json(responseBuilder({ error: ERROR_CODES.User.InvalidFormat }));
+    return res.status(200).json(responseBuilder({ error: ERROR_CODES.User.InvalidFormat }));
   }
 
   try {
     const data = await User.findById(id).exec()
-      res.status(200).json(responseBuilder({ data }));
+    return res.status(200).json(responseBuilder({ data }));
   } catch (error) {
     console.log(error)
-    res.status(200).json(responseBuilder({ error: ERROR_CODES.User.NotFound }));
+    return res.status(200).json(responseBuilder({ error: ERROR_CODES.User.NotFound }));
   }
   
 });

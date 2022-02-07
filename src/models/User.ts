@@ -14,7 +14,7 @@ const user = mongoose.model('User', UserSchema);
 export default user;
 
 export interface UserType {
-  _id: mongoose.Types.ObjectId,
+  _id: string,
   name: string,
   username: string,
   wallet: string,

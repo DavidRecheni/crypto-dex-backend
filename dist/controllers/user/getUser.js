@@ -29,15 +29,16 @@ router.get('/user/:userID', (req, res) => __awaiter(void 0, void 0, void 0, func
     // #swagger.description = 'Get user by Used Id'
     const id = req.params.userID;
     if (!userUtils_1.default.validUserId(id)) {
-        res.status(200).json((0, responseBuilder_1.default)({ error: constant_1.default.User.InvalidFormat }));
+        console.log('not valid');
+        return res.status(200).json((0, responseBuilder_1.default)({ error: constant_1.default.User.InvalidFormat }));
     }
     try {
         const data = yield User_1.default.findById(id).exec();
-        res.status(200).json((0, responseBuilder_1.default)({ data }));
+        return res.status(200).json((0, responseBuilder_1.default)({ data }));
     }
     catch (error) {
         console.log(error);
-        res.status(200).json((0, responseBuilder_1.default)({ error: constant_1.default.User.NotFound }));
+        return res.status(200).json((0, responseBuilder_1.default)({ error: constant_1.default.User.NotFound }));
     }
 }));
 /**
