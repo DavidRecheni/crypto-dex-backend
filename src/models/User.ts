@@ -3,10 +3,12 @@ import mongoose from 'mongoose';
 const UserSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
   name: String,
-  username: String,
-  wallet: String,
+  username: {type: String, unique: true, required: true},
+  email: {type: String, unique: true},
   bio: String,
-  avatar: String,
+  avatar: {type: [Number], required: true},
+  publicAddress: { type: String, unique: true, required: true},
+  nonce: {type: Number, defaut: () => Math.floor(Math.random() * 1000000)}
 });
 
 const user = mongoose.model('User', UserSchema);
@@ -17,7 +19,9 @@ export interface UserType {
   _id: string,
   name: string,
   username: string,
-  wallet: string,
+  publicAddress: string,
   bio: string,
   avatar: string,
+  email: string,
+  nonce: number
 }
