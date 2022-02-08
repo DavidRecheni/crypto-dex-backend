@@ -1,1 +1,0 @@
-{"version":3,"file":"constant.js","sourceRoot":"","sources":["../src/constant.ts"],"names":[],"mappings":";;AAAA,MAAM,WAAW,GAAG;IAClB,IAAI,EAAE;QACJ,aAAa,EAAE,sCAAsC;QACrD,QAAQ,EAAE,qBAAqB;QAC/B,aAAa,EAAE,2CAA2C;QAC1D,aAAa,EAAE,iCAAiC;QAChD,cAAc,EAAE,wBAAwB;KACzC;CACF,CAAC;AAEF,kBAAe,WAAW,CAAC"}

@@ -38,7 +38,7 @@ router.get('/user/:userID', async (req:express.Request, res:express.Response) =>
 /**
  * Get username by the first characters sent (min 3)
  */
-router.get('/username/:startswith', async(req:express.Request, res:express.Response) => {
+router.get('/username/:startswith', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by the first characters of the username (case insensitive)'
 
@@ -60,14 +60,14 @@ router.get('/username/:startswith', async(req:express.Request, res:express.Respo
 /**
  * Get all users
  */
-router.get('/user', (req:express.Request, res:express.Response) => {
+router.get('/user', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get all users'
 
   let result = {};
 
   try {
-    var user = User.find(userUtils.mapUserFind(req)).exec();
+    var user = await User.find(userUtils.mapUserFind(req)).exec();
     result = responseBuilder(user);
   } catch (error) {
     result = responseBuilder({ error: ERROR_CODES.User.ErrorUserList });
@@ -92,7 +92,7 @@ router.get('/user', (req:express.Request, res:express.Response) => {
     indexUser(data.username, data._id.toString());
     result = responseBuilder(data);
   } catch (error) {
-    console.log(error?.code);
+    console.log(error);
     switch(error?.code)
     {
       case 11000:

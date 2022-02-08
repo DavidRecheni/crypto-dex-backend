@@ -8,17 +8,22 @@ const router = Router();
 /**
  * Get catalog by parameter
  */
-router.get('/catalog/:parameter', (req, res) => {
+router.get('/catalog/:parameter', async (req, res) => {
   // #swagger.tags = ['Catalog']
   // #swagger.description = 'Get catalog lists based on parameter. Possible values: coin, , ,'
 
+  let result = {};
+
   switch (req.params.parameter) {
     case 'coin':
-      res.status(200).json(responseBuilder(coins()));
+      result = responseBuilder(coins());
       break;
     default:
-      res.status(200).json(responseBuilder({ error: ERROR_CODES.Catalog.NotFound }));
+      result = responseBuilder({ error: ERROR_CODES.Catalog.NotFound });
   }
+
+  res.status(200).json(result);
+
 });
 
 export default router;
