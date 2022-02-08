@@ -1,5 +1,7 @@
 import { Router } from 'express';
-import coins from '../../services/catalog';
+import coins from '../services/catalog';
+import ERROR_CODES from '../constant';
+import responseBuilder from '../utils/responseBuilder';
 
 const router = Router();
 
@@ -12,10 +14,10 @@ router.get('/catalog/:parameter', (req, res) => {
 
   switch (req.params.parameter) {
     case 'coin':
-      res.status(200).json(coins());
+      res.status(200).json(responseBuilder(coins()));
       break;
     default:
-      res.status(200).json({ error: 'Catalog not found' });
+      res.status(200).json(responseBuilder({ error: ERROR_CODES.Catalog.NotFound }));
   }
 });
 

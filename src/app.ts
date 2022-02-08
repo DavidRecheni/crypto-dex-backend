@@ -12,6 +12,10 @@ dotenv.config();
 mongoose.connect(process.env.DATABASE_URL);
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 routes(app);
 
 app.use(cors());
@@ -23,9 +27,6 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument),
 );
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.listen(app.get('port'), () => {
   console.log(`App listening at http://localhost:${app.get('port')}`);

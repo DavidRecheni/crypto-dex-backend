@@ -1,7 +1,7 @@
 const responseBuilder = (data: any = [], error: string = '') => ({
-  status: error ? 'OK' : 'ERROR',
-  error,
-  data,
+  status: error ? 'Error' : 'Ok',
+  error: error,
+  data: data,
 });
 
 export default responseBuilder;
