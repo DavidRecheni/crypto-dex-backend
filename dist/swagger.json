@@ -1,0 +1,122 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.1",
+        "title": "Chaintree API",
+        "description": "Welcome to Chaintree API v0.1. For any suggestions please contact feedback@chaintree.xyz"
+    },
+    "host": "localhost:3000",
+    "basePath": "",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/catalog/{parameter}": {
+            "get": {
+                "tags": [
+                    "Catalog"
+                ],
+                "description": "Get catalog lists based on parameter. Possible values: coin, , ,",
+                "parameters": [
+                    {
+                        "name": "parameter",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/user/{userID}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Get user by Used Id",
+                "parameters": [
+                    {
+                        "name": "userID",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/username/{startswith}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Get user by the first characters of the username (case insensitive)",
+                "parameters": [
+                    {
+                        "name": "startswith",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/user": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "description": "Create a new user",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        },
+        "/wallet/{address}": {
+            "get": {
+                "tags": [
+                    "Wallet"
+                ],
+                "description": "Get user by wallet address",
+                "parameters": [
+                    {
+                        "name": "address",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    }
+}
