@@ -49,9 +49,32 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get all users",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Create a new user",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -73,23 +96,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/user": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "description": "Create a new user",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "Created"
           }
         }
       }
@@ -99,7 +105,7 @@
         "tags": [
           "Wallet"
         ],
-        "description": "Get user by wallet address",
+        "description": "Get wallet userId and walletId",
         "parameters": [
           {
             "name": "address",
@@ -111,9 +117,53 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/wallet": {
+      "post": {
+        "tags": [
+          "Wallet"
+        ],
+        "description": "Create a new wallet address",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/address/{userId}/{coin}/{priority?}": {
+      "get": {
+        "tags": [
+          "Address"
+        ],
+        "description": "Get address from userId, coin and priority",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
           },
-          "500": {
-            "description": "Internal Server Error"
+          {
+            "name": "coin",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "priority?",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }

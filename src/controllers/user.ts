@@ -2,7 +2,6 @@
 import express, { Router } from 'express';
 import responseBuilder from '../utils/responseBuilder';
 import userUtils from '../utils/userUtils';
-import mongoose from 'mongoose';
 import User, { UserType } from '../models/User';
 import ERROR_CODES from '../constant';
 import { indexUser, searchUser } from '../services/openSearchService';
@@ -29,6 +28,28 @@ router.get('/user/:userID', async (req:express.Request, res:express.Response) =>
     } catch (error) {
       result = responseBuilder({ error: ERROR_CODES.User.NotFound });
     }
+  }
+
+  res.status(200).json(result);
+
+});
+
+/**
+ * Get user by wallet address
+ */
+ router.get('/user', async (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Get user by wallet address'
+
+  const address  = req.query.address;
+  let result = {};
+
+  try {
+    const data = await User.findOne({ wallet: address }).exec();
+    result = responseBuilder(data);
+  } catch (error) {
+    console.log(error)
+    result = responseBuilder({ error: ERROR_CODES.Wallet.NotFound });
   }
 
   res.status(200).json(result);

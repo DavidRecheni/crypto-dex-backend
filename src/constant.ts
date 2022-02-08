@@ -9,6 +9,7 @@ const ERROR_CODES = {
   },
   Wallet: {
     NotFound: 'Wallet with the specified address was not found.',
+    UnableToCreate : 'Unable to create Wallet.'
   },
   Catalog: {
     NotFound: 'Catalog not found.',

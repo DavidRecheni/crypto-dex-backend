@@ -1,6 +1,6 @@
-import swaggerAutogen from 'swagger-autogen';
+const swaggerAutogen = require('swagger-autogen')()
 
-swaggerAutogen();
+//swaggerAutogen();
 
 const doc = {
   info: {
@@ -13,10 +13,10 @@ const doc = {
 
 const outputFile = './swagger.json';
 const endpointsFiles = [
-  './controllers/catalog/getCatalog.js',
-  './controllers/user/getUser.js',
-  './controllers/user/postUser.js',
-  './controllers/wallet/getWallet.js',
+  './controllers/catalog.ts',
+  './controllers/user.ts',
+  './controllers/wallet.ts',
+  './controllers/address.ts',
 ];
 
 swaggerAutogen(outputFile, endpointsFiles, doc);
