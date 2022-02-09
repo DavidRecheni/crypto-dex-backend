@@ -20,11 +20,7 @@ const router = Router();
 
   try {
     let data = {};
-
-    if(userId)
-      data = await Wallet.findOne({ wallet: address, userId: userId }).exec();
-    else
-      data = await Wallet.findOne({ wallet: address }).exec();
+    data = await Wallet.findOne({ wallet: address, userId: userId || undefined }).exec();
 
     result = responseBuilder(data);
   } catch (error) {

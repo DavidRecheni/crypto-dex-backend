@@ -20,11 +20,7 @@ const router = Router();
 
   try {
     let data = {};
-
-    if(priority)
-      data = await Wallet.find({ userId: userId, coin : coin, main: true }).exec();
-    else
-      data = await Wallet.find({ userId: userId, coin : coin }).exec();
+    data = await Wallet.find({ userId: userId, coin : coin, main: !!priority }).exec();
 
     result = responseBuilder(data);
   } catch (error) {
@@ -56,13 +52,7 @@ const router = Router();
     const data = await wallet.save();
     result = responseBuilder(data);
   } catch (error) {
-    console.log(error);
-    switch(error?.code)
-    {
-      default:        
-        result = responseBuilder({ error: ERROR_CODES.Wallet.UnableToCreate });
-        break;
-    }
+    result = responseBuilder({ error: ERROR_CODES.Wallet.UnableToCreate });
   }
 
   res.status(200).json(result);
