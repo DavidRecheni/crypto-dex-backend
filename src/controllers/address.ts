@@ -1,5 +1,4 @@
 import express, { Router } from 'express';
-import User from '../models/User';
 import Wallet from '../models/Wallet';
 import ERROR_CODES from '../constant';
 import responseBuilder from '../utils/responseBuilder';
@@ -10,17 +9,18 @@ const router = Router();
 /**
  * Get wallet by wallet address and user id
  */
- router.get('/wallet/:address', async (req:express.Request, res:express.Response) => {
-  // #swagger.tags = ['Wallet']
-  // #swagger.description = 'Get wallet userId and walletId'
+ router.get('/address/:userId/:coin/:priority?', async (req:express.Request, res:express.Response) => {
+  // #swagger.tags = ['Address']
+  // #swagger.description = 'Get address from userId, coin and priority'
 
-  const address = req.params.address;
-  const userId = req.query.userId;
+  const userId = req.params.userId;
+  const coin = req.params.coin;
+  const priority = req.params.coin;
   let result = {};
 
   try {
     let data = {};
-    data = await Wallet.findOne({ wallet: address, userId: userId || undefined }).exec();
+    data = await Wallet.find({ userId: userId, coin : coin, main: !!priority }).exec();
 
     result = responseBuilder(data);
   } catch (error) {
@@ -52,13 +52,7 @@ const router = Router();
     const data = await wallet.save();
     result = responseBuilder(data);
   } catch (error) {
-    console.log(error);
-    switch(error?.code)
-    {
-      default:        
-        result = responseBuilder({ error: ERROR_CODES.Wallet.UnableToCreate });
-        break;
-    }
+    result = responseBuilder({ error: ERROR_CODES.Wallet.UnableToCreate });
   }
 
   res.status(200).json(result);
@@ -89,3 +83,4 @@ GET _search
 }
 
 */
+
