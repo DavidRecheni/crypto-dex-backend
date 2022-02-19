@@ -2,7 +2,7 @@
 import express, { Router } from 'express';
 import responseBuilder from '../utils/responseBuilder';
 import userUtils from '../utils/userUtils';
-import User, { UserType } from '../models/User';
+import User from '../models/User';
 import ERROR_CODES from '../constant';
 import { indexUser, searchUser } from '../services/openSearchService';
 
@@ -31,29 +31,27 @@ router.get('/user/:userID', async (req:express.Request, res:express.Response) =>
   }
 
   res.status(200).json(result);
-
 });
 
 /**
  * Get user by wallet address
  */
- router.get('/user', async (req, res) => {
+router.get('/user', async (req, res) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by wallet address'
 
-  const address  = req.query.address;
+  const { address } = req.query;
   let result = {};
 
   try {
     const data = await User.findOne({ wallet: address }).exec();
     result = responseBuilder(data);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     result = responseBuilder({ error: ERROR_CODES.Wallet.NotFound });
   }
 
   res.status(200).json(result);
-
 });
 
 /**
@@ -67,15 +65,14 @@ router.get('/username/:startswith', async (req:express.Request, res:express.Resp
   let result = {};
 
   try {
-    const data = await searchUser(id)
+    const data = await searchUser(id);
     result = responseBuilder(data.hits.map(userUtils.mapHit));
   } catch (error) {
-    console.log(error)
+    console.log(error);
     result = responseBuilder({ error: ERROR_CODES.User.UsernameError });
   }
 
   res.status(200).json(result);
-
 });
 
 /**
@@ -88,20 +85,19 @@ router.get('/user', async (req:express.Request, res:express.Response) => {
   let result = {};
 
   try {
-    var user = await User.find(userUtils.mapUserFind(req)).exec();
+    const user = await User.find(userUtils.mapUserFind(req)).exec();
     result = responseBuilder(user);
   } catch (error) {
     result = responseBuilder({ error: ERROR_CODES.User.ErrorUserList });
   }
 
   res.status(200).json(result);
-
 });
 
 /**
  * Create a new user and indexes for quicker search
  */
- router.post('/user', async (req:express.Request, res:express.Response) => {
+router.post('/user', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Create a new user'
 
@@ -114,18 +110,16 @@ router.get('/user', async (req:express.Request, res:express.Response) => {
     result = responseBuilder(data);
   } catch (error) {
     console.log(error);
-    switch(error?.code)
-    {
+    switch (error?.code) {
       case 11000:
         result = responseBuilder({ error: ERROR_CODES.User.AlreadyExists });
         break;
-      default:        
+      default:
         result = responseBuilder({ error: ERROR_CODES.User.UnableToCreate });
     }
   }
 
   res.status(200).json(result);
-
 });
 
 export default router;

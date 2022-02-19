@@ -3,9 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 import swaggerDocument from './swagger.json';
 import routes from './config/routes';
-import mongoose from 'mongoose';
 
 dotenv.config();
 

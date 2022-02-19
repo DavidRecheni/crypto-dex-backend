@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    browser: true,
+    browser: false,
     es2021: true,
   },
   extends: [
@@ -16,7 +16,8 @@ module.exports = {
   ],
   rules: {
     'linebreak-style': [0],
-    'no-console': false,
+    'no-console': 0,
+    'no-underscore-dangle': ['warn'],
     'import/extensions': [
       'error',
       'ignorePackages',
@@ -31,7 +32,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions: ['.js', '.ts'],
       },
     },
   },

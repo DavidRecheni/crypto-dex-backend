@@ -1,8 +1,9 @@
 {
   "eslint.alwaysShowStatus": true,
-  "eslint.format.enable": true,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.formatOnSave": true,
   "screencastMode.mouseIndicatorColor": "#0000",
-  "editor.bracketPairColorization.enabled": true
+  "editor.bracketPairColorization.enabled": true,
+  "eslint.format.enable": true,
+  "eslint.lintTask.enable": true
 }

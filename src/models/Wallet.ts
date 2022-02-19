@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 
 const WalletSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
-  coin: {type: String, required: true},
+  coin: { type: String, required: true },
   userId: mongoose.Types.ObjectId,
-  address: { type: String, required: true},
-  main: { type: Boolean }
+  address: { type: String, required: true },
+  main: { type: Boolean },
 });
 
 const wallet = mongoose.model('Wallet', WalletSchema);
