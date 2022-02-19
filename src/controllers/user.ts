@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import express, { Router } from 'express';
 import responseBuilder from '../utils/responseBuilder';
 import userUtils from '../utils/userUtils';

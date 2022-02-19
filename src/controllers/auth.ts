@@ -19,9 +19,10 @@ router.get('/auth/:publicAddress', async (req:express.Request, res:express.Respo
 
   try {
     const data = await User
-      .findOne({ wallet: publicAddress })
+      .findOne({ publicAddress })
       .select({ _id: 0, nonce: 1, publicAddress: 1 })
       .exec();
+    console.log('found user: ', data);
     result = responseBuilder(data);
   } catch (error) {
     console.log(error);
