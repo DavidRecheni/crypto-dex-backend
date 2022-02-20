@@ -16,7 +16,7 @@ router.get('/catalog/:parameter', async (req, res) => {
 
   switch (req.params.parameter) {
     case 'coin':
-      result = responseBuilder(coins());
+      result = responseBuilder({ data: coins() });
       break;
     default:
       result = responseBuilder({ error: ERROR_CODES.Catalog.NotFound });

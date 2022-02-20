@@ -1,5 +1,5 @@
-const responseBuilder = (data: any = [], error: string = '') => ({
-  status: error ? 'Error' : 'Ok',
+const responseBuilder = ({ data = [], error = '' }) => ({
+  status: error.length ? 'Error' : 'Ok',
   error,
   data,
 });

@@ -85,7 +85,7 @@ router.get('/user', async (req:express.Request, res:express.Response) => {
 
   try {
     const user = await User.find(userUtils.mapUserFind(req)).exec();
-    result = responseBuilder(user);
+    result = responseBuilder({ data: user });
   } catch (error) {
     result = responseBuilder({ error: ERROR_CODES.User.ErrorUserList });
   }
