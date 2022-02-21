@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  _id: mongoose.Types.ObjectId,
+  _id: { type: mongoose.Types.ObjectId, default: new mongoose.Types.ObjectId() },
   name: String,
   username: { type: String, unique: true, required: true },
   email: { type: String, unique: true },
@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   publicAddress: { type: String, unique: true, required: true },
-  nonce: { type: Number, defaut: () => Math.floor(Math.random() * 1000000) },
+  nonce: { type: Number, defaut: Math.floor(Math.random() * 1000000) },
 });
 
 const user = mongoose.model('User', UserSchema);

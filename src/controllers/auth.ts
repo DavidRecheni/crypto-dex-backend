@@ -23,7 +23,7 @@ router.get('/auth/:publicAddress', async (req:express.Request, res:express.Respo
       .select({ _id: 0, nonce: 1, publicAddress: 1 })
       .exec();
     console.log('found user: ', data);
-    result = responseBuilder(data);
+    result = responseBuilder({ data });
   } catch (error) {
     console.log(error);
     result = responseBuilder({ error: ERROR_CODES.Wallet.NotFound });

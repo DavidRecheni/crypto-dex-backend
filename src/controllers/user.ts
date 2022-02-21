@@ -100,7 +100,8 @@ router.post('/user', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Create a new user'
 
-  const user = new User(userUtils.mapUserSave(req));
+  // TODO: Move nonce generator to default on schema
+  const user = new User({ ...req.body, nonce: Math.floor(Math.random() * 1000000) });
   let result = {};
 
   try {
