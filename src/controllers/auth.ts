@@ -3,6 +3,7 @@ import generateAccessToken from '../utils/token';
 import ERROR_CODES from '../constant';
 import responseBuilder from '../utils/responseBuilder';
 import User from '../models/User';
+import userUtils from '../utils/userUtils';
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.get('/auth/:publicAddress', async (req:express.Request, res:express.Respo
       .select({ _id: 0, nonce: 1, publicAddress: 1 })
       .exec();
     console.log('found user: ', data);
-    result = responseBuilder({ data });
+    result = responseBuilder({ data: { ...data, nonce: userUtils.noncePhrase(data.nonce) } });
   } catch (error) {
     console.log(error);
     result = responseBuilder({ error: ERROR_CODES.Wallet.NotFound });
