@@ -4,6 +4,7 @@ import userUtils from '../utils/userUtils';
 import User from '../models/User';
 import ERROR_CODES from '../constant';
 import { indexUser, searchUser } from '../services/openSearchService';
+import { base64encode, base64decode } from 'nodejs-base64'
 
 const router = Router();
 
@@ -117,6 +118,37 @@ router.post('/user', async (req:express.Request, res:express.Response) => {
       default:
         result = responseBuilder({ error: ERROR_CODES.User.UnableToCreate });
     }
+  }
+
+  res.status(200).json(result);
+});
+
+/**
+ * Create a new user and indexes for quicker search
+ */
+ router.post('/signature', async (req:express.Request, res:express.Response) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Create a new user'
+
+  // TODO: Move nonce generator to default on schema
+  const signature = req.body.signature;
+  let result = {};
+
+  try {
+
+    let data = [];
+
+    if(userUtils.validateSignature(signature))
+    {
+      data = [{ valid: "true", token: base64encode(signature) }];
+      res.cookie('chaintree_auth', base64encode(signature), { maxAge: 900000, httpOnly: false }) //change to httpOnly true when ssl
+    }
+    else
+      data = [{ valid: "false" }];
+      
+    result = responseBuilder({data : data});
+  } catch (error) {
+    result = responseBuilder({ error: ERROR_CODES.User.SignatureInvalid });
   }
 
   res.status(200).json(result);
