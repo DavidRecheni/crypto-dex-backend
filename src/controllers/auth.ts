@@ -1,4 +1,5 @@
 import express, { Router } from 'express';
+import generateAccessToken from '../utils/token';
 import ERROR_CODES from '../constant';
 import responseBuilder from '../utils/responseBuilder';
 import User from '../models/User';
@@ -51,7 +52,7 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
 
   // TODO: Fetch nonce, validate signature, generate token
 
-  return res.status(200).json({ token: 'tokentoken123' });
+  return res.status(200).json({ token: generateAccessToken({ publicAddress, nonce: 100 }) });
 });
 
 export default router;
