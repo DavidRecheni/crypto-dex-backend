@@ -51,7 +51,7 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
 
   // TODO: Fetch nonce, validate signature, generate token
 
-  res.status(200).json({ token: 'tokentoken123' });
+  return res.status(200).json({ token: 'tokentoken123' });
 });
 
 export default router;
