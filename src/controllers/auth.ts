@@ -53,18 +53,19 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
   }
 
   const userData = await User
-    .findOne({ publicAddress })
-    .select({ _id: 0, nonce: 1 })
-    .exec();
+    .findOne({ publicAddress });
 
   const verifiedAddress = ethers
     .utils
     .verifyMessage(userUtils.noncePhrase(userData.nonce), signedMessage);
   console.log('verification: ', verifiedAddress);
+
   if (verifiedAddress === publicAddress) {
+    userData.nonce = Math.floor(Math.random() * 1000000);
+    userData.save();
     return res
       .status(200)
-      .json({ token: generateAccessToken({ publicAddress, nonce: 100 }) });
+      .json({ token: generateAccessToken({ publicAddress }) });
   }
   return res.status(200).json(responseBuilder({ error: ERROR_CODES.User.InvalidSignature }));
 });
