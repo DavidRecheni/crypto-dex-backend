@@ -32,4 +32,26 @@ router.get('/auth/:publicAddress', async (req:express.Request, res:express.Respo
   res.status(200).json(result);
 });
 
+/**
+ * Post signedMessage to validate signature
+ */
+router.post('/auth', async (req:express.Request, res:express.Response) => {
+  // #swagger.tags = ['Auth']
+  // #swagger.description = '* Post signedMessage to validate signature'
+
+  console.log('POST body', req.body);
+
+  const { signedMessage, publicAddress } = req.body;
+
+  if (!signedMessage || !publicAddress) {
+    return res
+      .status(200)
+      .json(responseBuilder({ error: ERROR_CODES.Wallet.NotFound }));
+  }
+
+  // TODO: Fetch nonce, validate signature, generate token
+
+  res.status(200).json({ token: 'tokentoken123' });
+});
+
 export default router;
