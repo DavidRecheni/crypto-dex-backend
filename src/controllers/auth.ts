@@ -1,4 +1,5 @@
 import express, { Router } from 'express';
+import { ethers } from 'ethers';
 import generateAccessToken from '../utils/token';
 import ERROR_CODES from '../constant';
 import responseBuilder from '../utils/responseBuilder';
@@ -51,9 +52,21 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
       .json(responseBuilder({ error: ERROR_CODES.Wallet.NotFound }));
   }
 
-  // TODO: Fetch nonce, validate signature, generate token
+  const userData = await User
+    .findOne({ publicAddress })
+    .select({ _id: 0, nonce: 1 })
+    .exec();
 
-  return res.status(200).json({ token: generateAccessToken({ publicAddress, nonce: 100 }) });
+  const verifiedAddress = ethers
+    .utils
+    .verifyMessage(userUtils.noncePhrase(userData.nonce), signedMessage);
+  console.log('verification: ', verifiedAddress);
+  if (verifiedAddress === publicAddress) {
+    return res
+      .status(200)
+      .json({ token: generateAccessToken({ publicAddress, nonce: 100 }) });
+  }
+  return res.status(200).json(responseBuilder({ error: ERROR_CODES.User.InvalidSignature }));
 });
 
 export default router;
