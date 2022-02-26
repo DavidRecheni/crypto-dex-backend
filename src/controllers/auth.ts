@@ -65,7 +65,10 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
     userData.save();
     return res
       .status(200)
-      .json({ token: generateAccessToken({ publicAddress }) });
+      .json({
+        user: userData,
+        token: generateAccessToken({ publicAddress }),
+      });
   }
   return res.status(200).json(responseBuilder({ error: ERROR_CODES.User.InvalidSignature }));
 });
