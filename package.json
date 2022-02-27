@@ -19,6 +19,7 @@
   },
   "scripts": {
     "dev": "tsc -w & nodemon .",
+    "tsc": "tsc",
     "build": "tsc",
     "prestart": "yarn build",
     "start": "tsc & node .",
