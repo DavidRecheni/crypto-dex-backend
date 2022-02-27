@@ -56,6 +56,22 @@ router.get('/user', async (req, res) => {
 });
 
 /**
+ * Get user by wallet address
+ */
+ router.get('/users', async (req, res) => {
+  
+  try {
+    const data = await User.find().exec();
+
+    res.status(200).json(data);
+
+    //result = responseBuilder(data);
+  } catch (error) {
+  }
+});
+
+
+/**
  * Get username by the first characters sent (min 3)
  */
 router.get('/username/:startswith', async (req:express.Request, res:express.Response) => {
