@@ -51,8 +51,19 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
   }
 
   // TODO: Fetch nonce, validate signature, generate token
+  
+  const userNonce = await User
+    .findOne({ publicAddress })
+    .select({ _id: 0, nonce: 1 })
+    .exec();
 
+  if(!userNonce)
+    return res.status(200).json(responseBuilder({ error: ERROR_CODES.Wallet.NotFound }));
+
+  const token = generateAccessToken({ publicAddress, nonce: userNonce.nonce });
+  res.cookie('chaintree_jwt', token, { maxAge: 18000, httpOnly: false }) //change to httpOnly true when ssl
   return res.status(200).json({ token: generateAccessToken({ publicAddress, nonce: 100 }) });
+  
 });
 
 export default router;
