@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "tsc -w & nodemon .",
     "tsc": "tsc",
-    "build": "tsc",
+    "build": "yarn run tsc",
     "prestart": "yarn build",
     "start": "tsc & node .",
     "test": "echo \"Error: no test specified\" && exit 1"
