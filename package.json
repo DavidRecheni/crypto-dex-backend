@@ -19,7 +19,7 @@
   },
   "scripts": {
     "dev": "tsc -w & nodemon .",
-    "tsc": "./node_modules/typescript/bin/tsc",
+    "tsc": "tsc",
     "build": "yarn install & yarn run tsc",
     "prestart": "yarn build",
     "start": "tsc & node .",
