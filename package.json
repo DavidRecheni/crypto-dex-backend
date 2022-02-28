@@ -22,7 +22,7 @@
     "tsc": "tsc",
     "build": "tsc",
     "prestart": "yarn build",
-    "start": "tsc & node .",
+    "start": "tsc & node ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
