@@ -18,14 +18,12 @@
     "swagger-ui-express": "^4.3.0"
   },
   "scripts": {
-    "dev": "tsc -w & nodemon .",
-    "tsc": "./node_modules/typescript/bin/tsc",
-    "build": "tsc",
-    "prestart": "yarn build",
-    "postinstall": "npm run tsc",
-    "start": "node ./dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "start": "node dist/app.js",
+    "postinstall": "tsc",
+    "watch-node": "nodemon dist/app.js",
+    "watch-ts": "tsc -w",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master"
+},
   "devDependencies": {
     "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.12",
