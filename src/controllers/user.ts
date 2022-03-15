@@ -17,7 +17,6 @@ router.get('/user/id/:userID', async (req:express.Request, res:express.Response)
   // #swagger.description = 'Get user by Used Id'
 
   const id = req.params.userID;
-  console.log(id);
   let result = {};
 
   if (!userUtils.validUserId(id)) {
