@@ -9,7 +9,9 @@ import routes from './config/routes';
 
 dotenv.config();
 
-mongoose.connect(process.env.DATABASE_URL);
+mongoose.connect(process.env.DATABASE_URL)
+  .then(() => console.log('Connection to database stablished'))
+  .catch((e) => console.log('An error ocurred trying to access the database', e));
 
 const app = express();
 

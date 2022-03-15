@@ -3,7 +3,7 @@ import responseBuilder from '../utils/responseBuilder';
 import userUtils from '../utils/userUtils';
 import User from '../models/User';
 import ERROR_CODES from '../constant';
-import { indexUser, searchUser } from '../services/openSearchService';
+// import { indexUser, searchUser } from '../services/openSearchService';
 
 const router = Router();
 
@@ -64,8 +64,11 @@ router.get('/username/:startswith', async (req:express.Request, res:express.Resp
   let result = {};
 
   try {
-    const data = await searchUser(id);
-    result = responseBuilder(data.hits.map(userUtils.mapHit));
+    // const data = await searchUser(id); // Elastic search was paused
+    const data = await User.find({
+      username: { $regex: `.*${id || ''}.*`, $options: 'i' },
+    }).exec();
+    result = responseBuilder({ data });
   } catch (error) {
     console.log(error);
     result = responseBuilder({ error: ERROR_CODES.User.UsernameError });
@@ -77,14 +80,14 @@ router.get('/username/:startswith', async (req:express.Request, res:express.Resp
 /**
  * Get all users
  */
-router.get('/user', async (req:express.Request, res:express.Response) => {
+router.get('/users', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get all users'
 
   let result = {};
 
   try {
-    const user = await User.find(userUtils.mapUserFind(req)).exec();
+    const user = await User.find().exec();
     result = responseBuilder({ data: user });
   } catch (error) {
     result = responseBuilder({ error: ERROR_CODES.User.ErrorUserList });
@@ -106,7 +109,7 @@ router.post('/user', async (req:express.Request, res:express.Response) => {
 
   try {
     const data = await user.save();
-    indexUser(data.username, data._id.toString());
+    // indexUser(data.username, data._id.toString()); // Elastic search was paused
     result = responseBuilder(data);
   } catch (error) {
     console.log(error);
