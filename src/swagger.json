@@ -32,7 +32,42 @@
         }
       }
     },
-    "/user/{userID}": {
+    "/users": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get all users",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users/username/{startswith}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get user by the first characters of the username (case insensitive)",
+        "parameters": [
+          {
+            "name": "startswith",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/user/id/{userID}": {
       "get": {
         "tags": [
           "User"
@@ -53,25 +88,20 @@
         }
       }
     },
-    "/user": {
+    "/user/username/{username}": {
       "get": {
         "tags": [
           "User"
         ],
-        "description": "Get all users",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
+        "description": "Get user by the username caseinsensitive",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
-        }
-      },
-      "post": {
-        "tags": [
-          "User"
         ],
-        "description": "Create a new user",
-        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -79,20 +109,34 @@
         }
       }
     },
-    "/username/{startswith}": {
+    "/user/wallet": {
       "get": {
         "tags": [
           "User"
         ],
-        "description": "Get user by the first characters of the username (case insensitive)",
+        "description": "Get user by a wallet ID",
         "parameters": [
           {
-            "name": "startswith",
-            "in": "path",
+            "name": "wallet_address",
+            "in": "body",
             "required": true,
-            "type": "string"
+            "type": "JSON"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Create a new user",
+        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
