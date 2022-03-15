@@ -64,7 +64,7 @@ router.get('/username/:startswith', async (req:express.Request, res:express.Resp
   let result = {};
 
   try {
-    // const data = await searchUser(id); // Elastic search was paused
+    // const data = await searchUser(id);
     const data = await User.find({
       username: { $regex: `.*${id || ''}.*`, $options: 'i' },
     }).exec();
@@ -109,7 +109,7 @@ router.post('/user', async (req:express.Request, res:express.Response) => {
 
   try {
     const data = await user.save();
-    // indexUser(data.username, data._id.toString()); // Elastic search was paused
+    // indexUser(data.username, data._id.toString());
     result = responseBuilder(data);
   } catch (error) {
     console.log(error);

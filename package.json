@@ -6,7 +6,6 @@
   "author": "Deivid <david_recheni@hotmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@opensearch-project/opensearch": "^1.0.2",
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
@@ -23,7 +22,7 @@
     "watch-node": "nodemon dist/app.js",
     "watch-ts": "tsc -w",
     "deploy": "git add . && git commit -m Heroku && git push heroku master"
-},
+  },
   "devDependencies": {
     "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.12",

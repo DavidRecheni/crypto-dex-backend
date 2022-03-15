@@ -65,7 +65,7 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
     userData.save();
     const accessToken = generateAccessToken({ publicAddress });
 
-    res.cookie('chaintree_jwt', accessToken, { maxAge: 18000, httpOnly: false }) //change to httpOnly true when ssl
+    res.cookie('chaintree_jwt', accessToken, { maxAge: 18000, httpOnly: false }); // change to httpOnly true when ssl
     return res
       .status(200)
       .json({
@@ -73,7 +73,7 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
         token: accessToken,
       });
   }
-  
+
   return res.status(200).json(responseBuilder({ error: ERROR_CODES.User.InvalidSignature }));
 });
 
