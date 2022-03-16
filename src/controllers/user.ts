@@ -35,11 +35,11 @@ router.get('/user/id/:userID', async (req:express.Request, res:express.Response)
 /**
  * Get user by wallet address
  */
-router.get('/user/wallet', async (req, res) => {
+router.get('/user/wallet', async (req: express.Request<{address: string}>, res: express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by wallet address'
 
-  const address = req.body.wallet_address as string;
+  const address = req.body.wallet_address;
   let result = {};
 
   try {
