@@ -35,23 +35,32 @@ router.get('/user/id/:userID', async (req:express.Request, res:express.Response)
 /**
  * Get user by wallet address
  */
-router.get('/user/wallet', async (req: express.Request<{address: string}>, res: express.Response) => {
+router.get('/user/wallet', async (req: express.Request<{ address: string }>, res: express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by wallet address'
 
-  const address = req.body.wallet_address;
+  const address = req?.body?.wallet_address || undefined;
   let result = {};
 
+  if (!address) {
+    result = responseBuilder({ error: 'Wallet ID information is missing on the request body' });
+    return res.status(400).json(result);
+  }
+
   try {
-    const walletInfo = await Wallet.findOne({ address }).exec();
-    const data = await User.findById(walletInfo.userId).exec();
-    result = responseBuilder({ data });
+    const userWithAddress = await User.findOne({ publicAddress: address });
+    if (userWithAddress) result = responseBuilder({ data: userWithAddress });
+    else {
+      const walletInfo = await Wallet.findOne({ address }).exec();
+      const data = await User.findById(walletInfo.userId).exec();
+      result = responseBuilder({ data });
+    }
   } catch (error) {
     console.log(error);
     result = responseBuilder({ error: ERROR_CODES.Wallet.NotFound });
   }
 
-  res.status(200).json(result);
+  return res.status(200).json(result);
 });
 
 /**
@@ -127,8 +136,8 @@ router.post('/user', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Create a new user'
 
-  // TODO: Move nonce generator to default on schema
-  const user = new User({ ...req.body, nonce: Math.floor(Math.random() * 1000000) });
+  const user = new User(req.body);
+  console.log(user);
   let result = {};
 
   try {
