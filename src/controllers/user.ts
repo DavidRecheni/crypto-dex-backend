@@ -3,6 +3,7 @@ import responseBuilder from '../utils/responseBuilder';
 import userUtils from '../utils/userUtils';
 import User from '../models/User';
 import ERROR_CODES from '../constant';
+import Wallet from '../models/Wallet';
 // import { indexUser, searchUser } from '../services/openSearchService';
 
 const router = Router();
@@ -11,7 +12,7 @@ const router = Router();
  * Get user by userId
  */
 // TODO: Define type
-router.get('/user/:userID', async (req:express.Request, res:express.Response) => {
+router.get('/user/id/:userID', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by Used Id'
 
@@ -23,40 +24,49 @@ router.get('/user/:userID', async (req:express.Request, res:express.Response) =>
   } else {
     try {
       const data = await User.findById(id).exec();
-      result = responseBuilder(data);
+      result = responseBuilder({ data });
     } catch (error) {
       result = responseBuilder({ error: ERROR_CODES.User.NotFound });
     }
   }
-
   res.status(200).json(result);
 });
 
 /**
  * Get user by wallet address
  */
-router.get('/user', async (req, res) => {
+router.get('/user/wallet', async (req: express.Request<{ address: string }>, res: express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by wallet address'
 
-  const { address } = req.query;
+  const address = req?.body?.wallet_address || undefined;
   let result = {};
 
+  if (!address) {
+    result = responseBuilder({ error: 'Wallet ID information is missing on the request body' });
+    return res.status(400).json(result);
+  }
+
   try {
-    const data = await User.findOne({ wallet: address }).exec();
-    result = responseBuilder(data);
+    const userWithAddress = await User.findOne({ publicAddress: address });
+    if (userWithAddress) result = responseBuilder({ data: userWithAddress });
+    else {
+      const walletInfo = await Wallet.findOne({ address }).exec();
+      const data = await User.findById(walletInfo.userId).exec();
+      result = responseBuilder({ data });
+    }
   } catch (error) {
     console.log(error);
     result = responseBuilder({ error: ERROR_CODES.Wallet.NotFound });
   }
 
-  res.status(200).json(result);
+  return res.status(200).json(result);
 });
 
 /**
  * Get username by the first characters sent (min 3)
  */
-router.get('/username/:startswith', async (req:express.Request, res:express.Response) => {
+router.get('/users/username/:startswith', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by the first characters of the username (case insensitive)'
 
@@ -67,6 +77,29 @@ router.get('/username/:startswith', async (req:express.Request, res:express.Resp
     // const data = await searchUser(id);
     const data = await User.find({
       username: { $regex: `.*${id || ''}.*`, $options: 'i' },
+    }).exec();
+    result = responseBuilder({ data });
+  } catch (error) {
+    console.log(error);
+    result = responseBuilder({ error: ERROR_CODES.User.UsernameError });
+  }
+
+  res.status(200).json(result);
+});
+
+/**
+ * Get user by username strict
+ */
+router.get('/user/username/:username', async (req:express.Request, res:express.Response) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Get user by the username caseinsensitive'
+
+  const id = req.params.username;
+  let result = {};
+
+  try {
+    const data = await User.findOne({
+      username: id,
     }).exec();
     result = responseBuilder({ data });
   } catch (error) {
@@ -103,8 +136,8 @@ router.post('/user', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Create a new user'
 
-  // TODO: Move nonce generator to default on schema
-  const user = new User({ ...req.body, nonce: Math.floor(Math.random() * 1000000) });
+  const user = new User(req.body);
+  console.log(user);
   let result = {};
 
   try {
