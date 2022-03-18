@@ -35,15 +35,15 @@ router.get('/user/id/:userID', async (req:express.Request, res:express.Response)
 /**
  * Get user by wallet address
  */
-router.get('/user/wallet', async (req: express.Request<{ address: string }>, res: express.Response) => {
+router.get('/user/wallet/:publicAddress', async (req: express.Request, res: express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by wallet address'
 
-  const address = req?.body?.wallet_address || undefined;
+  const address = req.params.publicAddress;
   let result = {};
 
   if (!address) {
-    result = responseBuilder({ error: 'Wallet ID information is missing on the request body' });
+    result = responseBuilder({ error: 'Wallet ID information is missing on the request params' });
     return res.status(400).json(result);
   }
 

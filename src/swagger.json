@@ -109,7 +109,7 @@
         }
       }
     },
-    "/user/wallet": {
+    "/user/wallet/{publicAddress}": {
       "get": {
         "tags": [
           "User"
@@ -117,10 +117,10 @@
         "description": "Get user by a wallet ID",
         "parameters": [
           {
-            "name": "wallet_address",
-            "in": "body",
+            "name": "publicAddress",
+            "in": "path",
             "required": true,
-            "type": "JSON"
+            "type": "string"
           }
         ],
         "responses": {
