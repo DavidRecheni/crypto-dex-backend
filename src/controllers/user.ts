@@ -4,6 +4,7 @@ import userUtils from '../utils/userUtils';
 import User from '../models/User';
 import ERROR_CODES from '../constant';
 import Wallet from '../models/Wallet';
+import checkAuth from '../utils/checkAuth';
 // import { indexUser, searchUser } from '../services/openSearchService';
 
 const router = Router();
@@ -127,6 +128,34 @@ router.get('/users', async (req:express.Request, res:express.Response) => {
   }
 
   res.status(200).json(result);
+});
+
+type userModificationRequest = {
+  headers: {
+    authorization: string
+  },
+  body: {
+    userId: string
+  },
+  userId: string
+}
+
+router.put('/user/:userId', checkAuth, async (req: express.Request<userModificationRequest>, res) => {
+  let data = {};
+  try {
+    const reqUserId = req.body.userId;
+    const newValues = req.body;
+    const { userId } = req.params;
+    if (!(reqUserId === userId)) {
+      data = responseBuilder({ error: ERROR_CODES.Auth.unauthorized });
+    } else {
+      data = await User.findByIdAndUpdate(userId, newValues);
+    }
+  } catch (e) {
+    data = responseBuilder({ error: e });
+  }
+
+  res.status(200).json(data);
 });
 
 /**
