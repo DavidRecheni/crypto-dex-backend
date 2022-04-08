@@ -5,7 +5,6 @@ import User from '../models/User';
 import ERROR_CODES from '../constant';
 import Wallet from '../models/Wallet';
 import checkAuth from '../utils/checkAuth';
-// import { indexUser, searchUser } from '../services/openSearchService';
 
 const router = Router();
 
@@ -130,7 +129,7 @@ router.get('/users', async (req:express.Request, res:express.Response) => {
   res.status(200).json(result);
 });
 
-type userModificationRequest = {
+interface IUserModificationRequest {
   headers: {
     authorization: string
   },
@@ -140,22 +139,22 @@ type userModificationRequest = {
   userId: string
 }
 
-router.put('/user/:userId', checkAuth, async (req: express.Request<userModificationRequest>, res) => {
-  let data = {};
+router.put('/user/:userId', checkAuth, async (req: express.Request<IUserModificationRequest >, res) => {
+  let result = {};
   try {
     const reqUserId = req.body.userId;
     const newValues = req.body;
     const { userId } = req.params;
-    if (!(reqUserId === userId)) {
-      data = responseBuilder({ error: ERROR_CODES.Auth.unauthorized });
+    if (reqUserId !== userId) {
+      result = responseBuilder({ error: ERROR_CODES.Auth.unauthorized });
     } else {
-      data = await User.findByIdAndUpdate(userId, newValues);
+      result = await User.findByIdAndUpdate(userId, newValues);
     }
   } catch (e) {
-    data = responseBuilder({ error: e });
+    result = responseBuilder({ error: e });
   }
 
-  res.status(200).json(data);
+  res.status(200).json(result);
 });
 
 /**

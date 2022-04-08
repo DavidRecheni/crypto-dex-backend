@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 import ERROR_CODES from '../constant';
 import responseBuilder from './responseBuilder';
 
-type authRequest = {
+interface IAuthRequest {
   headers: {
     authorization: string
   },
@@ -13,7 +13,7 @@ type authRequest = {
 }
 
 export default async function checkAuth(
-  req: express.Request<authRequest>,
+  req: express.Request<IAuthRequest>,
   res: express.Response,
   next: Function,
 ) {
