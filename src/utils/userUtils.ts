@@ -8,6 +8,7 @@ const userUtils = {
     name: { $regex: `.*${userBody?.query?.name || ''}.*`, $options: 'i' },
     wallet: { $regex: `.*${userBody?.query?.wallet || ''}.*` },
   }),
+  publicFields: 'id name username email bio avatar publicAddress',
 };
 
 export default userUtils;

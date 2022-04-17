@@ -63,7 +63,7 @@ router.post('/auth', async (req:express.Request, res:express.Response) => {
   if (verifiedAddress === publicAddress) {
     userData.nonce = Math.floor(Math.random() * 1000000);
     userData.save();
-    const accessToken = generateAccessToken({ publicAddress });
+    const accessToken = generateAccessToken({ publicAddress, userId: userData.id });
 
     res.cookie('chaintree_jwt', accessToken, { maxAge: 18000, httpOnly: false }); // change to httpOnly true when ssl
     return res

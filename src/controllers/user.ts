@@ -4,7 +4,7 @@ import userUtils from '../utils/userUtils';
 import User from '../models/User';
 import ERROR_CODES from '../constant';
 import Wallet from '../models/Wallet';
-// import { indexUser, searchUser } from '../services/openSearchService';
+import checkAuth from '../utils/checkAuth';
 
 const router = Router();
 
@@ -23,7 +23,7 @@ router.get('/user/id/:userID', async (req:express.Request, res:express.Response)
     result = responseBuilder({ error: ERROR_CODES.User.InvalidFormat });
   } else {
     try {
-      const data = await User.findById(id).exec();
+      const data = await User.findById(id, userUtils.publicFields).exec();
       result = responseBuilder({ data });
     } catch (error) {
       result = responseBuilder({ error: ERROR_CODES.User.NotFound });
@@ -48,11 +48,11 @@ router.get('/user/wallet/:publicAddress', async (req: express.Request, res: expr
   }
 
   try {
-    const userWithAddress = await User.findOne({ publicAddress: address });
+    const userWithAddress = await User.findOne({ publicAddress: address }, userUtils.publicFields);
     if (userWithAddress) result = responseBuilder({ data: userWithAddress });
     else {
       const walletInfo = await Wallet.findOne({ address }).exec();
-      const data = await User.findById(walletInfo.userId).exec();
+      const data = await User.findById(walletInfo.userId, userUtils.publicFields).exec();
       result = responseBuilder({ data });
     }
   } catch (error) {
@@ -77,7 +77,7 @@ router.get('/users/username/:startswith', async (req:express.Request, res:expres
     // const data = await searchUser(id);
     const data = await User.find({
       username: { $regex: `.*${id || ''}.*`, $options: 'i' },
-    }).exec();
+    }, userUtils.publicFields).exec();
     result = responseBuilder({ data });
   } catch (error) {
     console.log(error);
@@ -100,7 +100,7 @@ router.get('/user/username/:username', async (req:express.Request, res:express.R
   try {
     const data = await User.findOne({
       username: id,
-    }).exec();
+    }, userUtils.publicFields).exec();
     result = responseBuilder({ data });
   } catch (error) {
     console.log(error);
@@ -120,10 +120,38 @@ router.get('/users', async (req:express.Request, res:express.Response) => {
   let result = {};
 
   try {
-    const user = await User.find().exec();
+    const user = await User.find({}, userUtils.publicFields).exec();
     result = responseBuilder({ data: user });
   } catch (error) {
     result = responseBuilder({ error: ERROR_CODES.User.ErrorUserList });
+  }
+
+  res.status(200).json(result);
+});
+
+interface IUserModificationRequest {
+  headers: {
+    authorization: string
+  },
+  body: {
+    userId: string
+  },
+  userId: string
+}
+
+router.put('/user/:userId', checkAuth, async (req: express.Request<IUserModificationRequest >, res) => {
+  let result = {};
+  try {
+    const reqUserId = req.body.userId;
+    const newValues = req.body;
+    const { userId } = req.params;
+    if (reqUserId !== userId) {
+      result = responseBuilder({ error: ERROR_CODES.Auth.unauthorized });
+    } else {
+      result = await User.findByIdAndUpdate(userId, newValues);
+    }
+  } catch (e) {
+    result = responseBuilder({ error: e });
   }
 
   res.status(200).json(result);

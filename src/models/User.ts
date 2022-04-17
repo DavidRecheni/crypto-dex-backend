@@ -1,9 +1,11 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  _id: { type: mongoose.Types.ObjectId, default: new mongoose.Types.ObjectId() },
+  _id: { type: mongoose.Types.ObjectId, default: new mongoose.Types.ObjectId(), immutable: true },
   name: String,
-  username: { type: String, unique: true, required: true },
+  username: {
+    type: String, unique: true, required: true, immutable: true,
+  },
   email: { type: String, unique: true },
   bio: String,
   avatar: {

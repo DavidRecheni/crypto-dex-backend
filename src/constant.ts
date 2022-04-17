@@ -1,4 +1,7 @@
 const ERROR_CODES = {
+  Auth: {
+    unauthorized: 'The user is not authorized',
+  },
   User: {
     InvalidFormat: 'UserID is not in the correct format.',
     NotFound: 'User was not found.',
