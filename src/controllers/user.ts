@@ -42,16 +42,19 @@ router.get('/user/wallet/:publicAddress', async (req: express.Request, res: expr
   const address = req.params.publicAddress;
   let result = {};
 
+  console.log('Return user by wallet ', address);
   if (!address) {
     result = responseBuilder({ error: 'Wallet ID information is missing on the request params' });
     return res.status(400).json(result);
   }
 
   try {
-    const userWithAddress = await User.findOne({ publicAddress: address }, userUtils.publicFields);
+    const userWithAddress = await User.findOne({ publicAddress: address });
+    console.log('user found ', userWithAddress);
     if (userWithAddress) result = responseBuilder({ data: userWithAddress });
     else {
       const walletInfo = await Wallet.findOne({ address }).exec();
+      console.log('walletInfo', walletInfo);
       const data = await User.findById(walletInfo.userId, userUtils.publicFields).exec();
       result = responseBuilder({ data });
     }
@@ -148,7 +151,8 @@ router.put('/user/:userId', checkAuth, async (req: express.Request<IUserModifica
     if (reqUserId !== userId) {
       result = responseBuilder({ error: ERROR_CODES.Auth.unauthorized });
     } else {
-      result = await User.findByIdAndUpdate(userId, newValues);
+      const data = await User.findByIdAndUpdate(userId, newValues);
+      result = responseBuilder({ data });
     }
   } catch (e) {
     result = responseBuilder({ error: e });
