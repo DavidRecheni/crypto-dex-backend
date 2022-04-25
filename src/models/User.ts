@@ -16,7 +16,9 @@ const UserSchema = new mongoose.Schema({
     },
     required: true,
   },
-  publicAddress: { type: String, unique: true, required: true },
+  publicAddress: {
+    type: String, unique: true, required: true, immutable: true,
+  },
   nonce: { type: Number, defaut: Math.floor(Math.random() * 1000000) },
 });
 
