@@ -8,14 +8,6 @@ const UserSchema = new mongoose.Schema({
   },
   email: { type: String, unique: true },
   bio: String,
-  avatar: {
-    type: {
-      head: Number,
-      torso: Number,
-      body: Number,
-    },
-    required: true,
-  },
   publicAddress: {
     type: String, unique: true, required: true, immutable: true,
   },
@@ -32,7 +24,6 @@ export interface UserType {
   username: string,
   publicAddress: string,
   bio: string,
-  avatar: string,
   email: string,
   nonce: number
 }

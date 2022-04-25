@@ -1,23 +1,26 @@
 import mongoose from 'mongoose';
+import AvatarPartSlot from '../types/AvatarPartSlot';
 
 const OwnedAvatarPartSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
-  userId: mongoose.Types.ObjectId,
-  name: { type: String, required: true },
-  description: { type: String },
   active: { type: Boolean, default: false },
+  avatarSlot: { type: String, required: true },
+  description: { type: String },
+  name: { type: String, required: true },
   url: { type: String, required: true },
+  userId: mongoose.Types.ObjectId,
 });
 
-const ownedAvatarPart = mongoose.model('OwnedAvatarPart', OwnedAvatarPartSchema);
+const OwnedAvatarPart = mongoose.model('OwnedAvatarPart', OwnedAvatarPartSchema);
 
-export default ownedAvatarPart;
+export default OwnedAvatarPart;
 
 export interface OwnedAvatarPartType {
   _id: string,
-  userId: string,
-  name: string,
-  description: string,
   active: boolean,
+  avatarSlot: AvatarPartSlot,
+  description: string,
+  name: string,
   url: string
+  userId: string,
 }

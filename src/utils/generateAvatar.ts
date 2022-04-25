@@ -1,5 +1,5 @@
 import { CanvasRenderingContext2D, createCanvas, Image } from 'canvas';
-import AvatarTypePart from '../types/AvatarTypePart';
+import AvatarPartSlot from '../types/AvatarPartSlot';
 
 function createContext() {
   const canvas = createCanvas(200, 600);
@@ -7,7 +7,7 @@ function createContext() {
 }
 
 function addAvatarPiece(
-  partName: AvatarTypePart,
+  partName: AvatarPartSlot,
   partImage: string,
   canvasContext:CanvasRenderingContext2D,
 ) {
