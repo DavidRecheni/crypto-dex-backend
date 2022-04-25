@@ -1,4 +1,6 @@
 import express, { Router } from 'express';
+import UserAvatar from '../models/UserAvatar';
+import OwnedAvatarPart from '../models/OwnedAvatarPart';
 import generateAvatar from '../utils/generateAvatar';
 
 const router = Router();
@@ -18,31 +20,50 @@ const imgParts = [
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAADICAIAAADN+FL3AAAACXBIWXMAAAsSAAALEgHS3X78AAACIklEQVR4nO3SURVFABQAwUsVXaR4EdRRigwqyKDE27+ZCHt2+Z3X/bwDf3Xs26ooEW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWiZn5AIiEBrZ+89iYAAAAAElFTkSuQmCC',
 ];
 
+/**
+ * Get user avatar
+ */
 router.get('/avatar/:userId', async (req: express.Request, res: express.Response) => {
-  res.status(200).json({ data: generateAvatar(imgParts[0], imgParts[1], imgParts[2]) });
+  const { userId } = req.params;
+
+  const userAvatar = await UserAvatar.findOne({ userId });
+
+  res.status(200).json({ data: userAvatar });
 });
 
 /**
  * Get user by userId
  */
-// TODO: Define type
 router.post('/avatar', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Get user by Used Id'
-
+  generateAvatar(imgParts[0], imgParts[1], imgParts[2]);
   const avatarArr = req.body;
 
   console.log('avatar', avatarArr);
-  // if (!userUtils.validUserId(id)) {
-  //   result = responseBuilder({ error: ERROR_CODES.User.InvalidFormat });
-  // } else {
-  //   try {
-  //     const data = await User.findById(id).exec();
-  //     result = responseBuilder({ data });
-  //   } catch (error) {
-  //     result = responseBuilder({ error: ERROR_CODES.User.NotFound });
-  //   }
-  // }
+
+  res.status(200);
+});
+
+/**
+ * Get user parts
+ */
+router.get('/avatar/:userId/parts', async (req: express.Request, res: express.Response) => {
+  const { userId } = req.params;
+
+  const userParts = await OwnedAvatarPart.find({ userId });
+
+  res.status(200).json({ data: userParts });
+});
+
+/**
+ * Get user by userId
+ */
+router.post('/avatar/part', async (req:express.Request, res:express.Response) => {
+  const avatarArr = req.body;
+
+  console.log('avatar', avatarArr);
+
   res.status(200);
 });
 
