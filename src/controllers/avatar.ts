@@ -1,11 +1,8 @@
-import { CanvasRenderingContext2D } from 'canvas';
 import express, { Router } from 'express';
-// import { indexUser, searchUser } from '../services/openSearchService';
-const { createCanvas, Image } = require('canvas');
+import generateAvatar from '../utils/generateAvatar';
 
 const router = Router();
 
-// dummy images
 const imgParts = [
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAADICAIAAADN+FL3AAAACXBIWXMAAAsSAAALEgHS3X78AAACIElEQVR4nO3SQQ2EABDAwIUgASunG0u8kEB4EUxcfzMSmi7H+Vz3O/BXv31bFSXiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3qLiLSreouItKt6i4i0q3iIxMx+DRAc+Q0sVeQAAAABJRU5ErkJggg==',
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAADICAIAAADN+FL3AAAACXBIWXMAAAsSAAALEgHS3X78AAACHElEQVR4nO3SMRGAQBDAwIMCY7jEHC6+Y8AE6XYlZLK965rnHvjXce6KEvEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvkZiZD6VCBkS54HtcAAAAAElFTkSuQmCC',
@@ -21,26 +18,8 @@ const imgParts = [
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAADICAIAAADN+FL3AAAACXBIWXMAAAsSAAALEgHS3X78AAACIklEQVR4nO3SURVFABQAwUsVXaR4EdRRigwqyKDE27+ZCHt2+Z3X/bwDf3Xs26ooEW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWFW9R8RYVb1HxFhVvUfEWiZn5AIiEBrZ+89iYAAAAAElFTkSuQmCC',
 ];
 
-function getRandomIndex(maxNum: number) {
-  return Math.floor(Math.random() * maxNum);
-}
-
-function paintImage(x:number, y:number, canvasContext:CanvasRenderingContext2D) {
-  const img = new Image();
-  img.onload = () => canvasContext.drawImage(img, x, y);
-  img.onerror = (err:any) => { throw err; };
-  img.src = String(imgParts[getRandomIndex(imgParts.length)]);
-}
-
 router.get('/avatar/:userId', async (req: express.Request, res: express.Response) => {
-  const canvas = createCanvas(200, 600);
-  const ctx = canvas.getContext('2d');
-
-  paintImage(0, 0, ctx);
-  paintImage(0, 200, ctx);
-  paintImage(0, 400, ctx);
-
-  res.status(200).json({ data: canvas.toDataURL() });
+  res.status(200).json({ data: generateAvatar(imgParts[0], imgParts[1], imgParts[2]) });
 });
 
 /**
