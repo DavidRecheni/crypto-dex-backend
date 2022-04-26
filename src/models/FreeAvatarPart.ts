@@ -10,9 +10,9 @@ const FreeAvatarPartSchema = new mongoose.Schema({
   url: { type: String, required: true },
 });
 
-const freeAvatarPart = mongoose.model('FreeAvatarPart', FreeAvatarPartSchema);
+const FreeAvatarPart = mongoose.model('FreeAvatarPart', FreeAvatarPartSchema);
 
-export default freeAvatarPart;
+export default FreeAvatarPart;
 
 export interface FreeAvatarPartType {
   _id: string,

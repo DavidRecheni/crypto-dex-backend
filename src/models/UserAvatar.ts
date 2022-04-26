@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const UserAvatarSchema = new mongoose.Schema({
-  _id: mongoose.Types.ObjectId,
-  userId: mongoose.Types.ObjectId,
+  _id: { type: mongoose.Types.ObjectId, auto: true },
+  userId: { type: mongoose.Types.ObjectId, required: true },
   url: { type: String, required: true },
   parts: { type: [mongoose.Types.ObjectId] },
 });

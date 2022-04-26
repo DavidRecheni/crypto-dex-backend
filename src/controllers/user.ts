@@ -5,6 +5,8 @@ import User from '../models/User';
 import ERROR_CODES from '../constant';
 import Wallet from '../models/Wallet';
 import checkAuth from '../utils/checkAuth';
+import UserAvatar from '../models/UserAvatar';
+import defaultAvatarData from '../constants/defaultAvatarData';
 
 const router = Router();
 
@@ -166,26 +168,30 @@ router.put('/user/:userId', checkAuth, async (req: express.Request<IUserModifica
 router.post('/user', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Create a new user'
-
+  console.log('req body: ', req.body);
   const user = new User(req.body);
-  console.log(user);
+  console.log('user generated: ', user);
   let result = {};
-
+  let newUserData;
   try {
-    const data = await user.save();
-    result = responseBuilder(data);
+    newUserData = await user.save();
   } catch (error) {
     console.log(error);
     switch (error?.code) {
       case 11000:
-        result = responseBuilder({ error: ERROR_CODES.User.AlreadyExists });
-        break;
+        return res.status(200).json(responseBuilder({ error: ERROR_CODES.User.AlreadyExists }));
       default:
-        result = responseBuilder({ error: ERROR_CODES.User.UnableToCreate });
+        return res.status(200).json(responseBuilder({ error: ERROR_CODES.User.UnableToCreate }));
     }
   }
-
-  res.status(200).json(result);
+  try {
+    const userAvatar = new UserAvatar(defaultAvatarData(newUserData?._id));
+    await userAvatar.save();
+    result = responseBuilder(newUserData);
+  } catch (e) {
+    console.log('Error creating avatar', e);
+  }
+  return res.status(200).json(result);
 });
 
 export default router;

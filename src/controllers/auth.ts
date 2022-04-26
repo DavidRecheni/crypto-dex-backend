@@ -20,15 +20,14 @@ router.get('/auth/:publicAddress', async (req:express.Request, res:express.Respo
   const { publicAddress } = req.params;
   let result = {};
 
-  try {
-    const data = await User
-      .findOne({ publicAddress })
-      .select({ _id: 0, nonce: 1, publicAddress: 1 })
-      .exec();
-    console.log('found user: ', data);
-    result = responseBuilder({ data: { nonce: userUtils.noncePhrase(data.nonce) } });
-  } catch (error) {
-    console.log(error);
+  const data = await User
+    .findOne({ publicAddress })
+    .select({ _id: 0, nonce: 1, publicAddress: 1 })
+    .exec();
+  console.log('found user: ', data);
+  if (data) {
+    result = responseBuilder({ data: { nonce: userUtils.noncePhrase(data?.nonce) } });
+  } else {
     result = responseBuilder({ error: ERROR_CODES.Wallet.NotFound });
   }
 

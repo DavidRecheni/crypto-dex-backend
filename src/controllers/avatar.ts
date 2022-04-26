@@ -1,4 +1,5 @@
 import express, { Router } from 'express';
+import FreeAvatarPart from '../models/FreeAvatarPart';
 import UserAvatar from '../models/UserAvatar';
 import OwnedAvatarPart from '../models/OwnedAvatarPart';
 import generateAvatar from '../utils/generateAvatar';
@@ -51,9 +52,10 @@ router.post('/avatar', async (req:express.Request, res:express.Response) => {
 router.get('/avatar/:userId/parts', async (req: express.Request, res: express.Response) => {
   const { userId } = req.params;
 
+  const freeParts = await FreeAvatarPart.find({ available: true });
   const userParts = await OwnedAvatarPart.find({ userId });
 
-  res.status(200).json({ data: userParts });
+  res.status(200).json({ data: [...freeParts, ...userParts] });
 });
 
 /**
