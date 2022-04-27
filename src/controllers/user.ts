@@ -169,7 +169,7 @@ router.post('/user', async (req:express.Request, res:express.Response) => {
   // #swagger.tags = ['User']
   // #swagger.description = 'Create a new user'
   console.log('req body: ', req.body);
-  const user = new User(req.body);
+  const user = new User({ ...req.body, nonce: Math.floor(Math.random() * 1000000) });
   console.log('user generated: ', user);
   let result = {};
   let newUserData;
