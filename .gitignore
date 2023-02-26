@@ -2,6 +2,9 @@
 dist/*
 /dist
 /build
+.yarn/cache
+.yarn/unplugged
+.yarn/install-state.gz
 
 .DS_Store
 .env
